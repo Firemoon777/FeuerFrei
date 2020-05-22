@@ -1,0 +1,11 @@
+name: FirePlugin
+version: ${project.version}
+main: com.f1remoon.fireplugin.FirePlugin
+api-version: 1.13
+authors: [F1remoon]
+description: Burn it down
+website: f1remoon.com
+commands:
+  fire:
+    usage: /<command>
+    description: Make fire line
