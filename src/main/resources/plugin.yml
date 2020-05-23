@@ -12,4 +12,5 @@ commands:
     permission: fireplugin.create.line
   explode:
     usage: /<command> <x> <y> <z> [power]
-    description: Make boom
+    description: Make environment friendly boom
+    permission: fireplugin.create.explosion
