@@ -12,5 +12,10 @@ commands:
     permission: fireplugin.create.line
   explode:
     usage: /<command> <x> <y> <z> [power]
-    description: Make environment friendly boom
+    description: Make environment friendly boowm
     permission: fireplugin.create.explosion
+  dispenser-fire:
+    usage: /<command> <x1> <y1> <z1> <x2> <y2> <z2> [height] [ticks]
+    description: Finds all dispensers with up position and performs fireshow
+    permission: fireplugin.create.line.sequence
+

@@ -30,6 +30,11 @@ public class Explosion implements TabExecutor {
                 power = 5;
             }
 
+            //TODO: move upper bound to config
+            if(power > 20) {
+                power = 20;
+            }
+
             World w;
             if(sender instanceof Player) {
                 w = ((Player)sender).getWorld();
@@ -53,15 +58,11 @@ public class Explosion implements TabExecutor {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        List<String> com = new ArrayList<String>();
-        Location l;
-        if(sender instanceof Player) {
-            l = ((Player)sender).getLocation();
-        } else if (sender instanceof BlockCommandSender) {
-            l = ((BlockCommandSender)sender).getBlock().getLocation();
-        } else {
+        Location l = Tools.extractLocation(sender);
+        if(l == null) {
             return ImmutableList.of();
         }
+        List<String> com = new ArrayList<String>();
         if(args.length == 1) {
             com.add(String.format("%2.0f", l.getX()));
             com.add(String.format("%2.0f %2.0f", l.getX(), l.getY()));
