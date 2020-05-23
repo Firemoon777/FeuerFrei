@@ -7,5 +7,9 @@ description: Burn it down
 website: f1remoon.com
 commands:
   fire:
-    usage: /<command>
+    usage: /<command> <x> <y> <z> [height] [ticks]
     description: Make fire line
+    permission: fireplugin.create.line
+  explode:
+    usage: /<command> <x> <y> <z> [power]
+    description: Make boom

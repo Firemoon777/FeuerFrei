@@ -14,7 +14,9 @@ public final class FirePlugin extends JavaPlugin{
     @Override
     public void onEnable() {
         // Plugin startup logic
-        getCommand("fire").setExecutor(new FirePlugin());
+        getLogger().info(ChatColor.GREEN + "Feuer Frei init done");
+        getCommand("fire").setExecutor(new FireLine());
+        getCommand("explode").setExecutor(new Explosion());
     }
 
     @Override
