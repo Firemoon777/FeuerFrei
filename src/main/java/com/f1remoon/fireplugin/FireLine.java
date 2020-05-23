@@ -146,26 +146,24 @@ public class FireLine implements TabExecutor {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        if (command.getLabel().equalsIgnoreCase("dispenser-fire")) {
-            return ImmutableList.of();
-        } else if (command.getLabel().equalsIgnoreCase("fire")) {
+        if (command.getLabel().equalsIgnoreCase("fire") || command.getLabel().equalsIgnoreCase("dispenser-fire")) {
             Location l = Tools.extractLocation(sender);
             if (l == null) {
                 return ImmutableList.of();
             }
             List<String> com = new ArrayList<String>();
-            if (args.length == 1) {
+            if (args.length == 1 || (args.length == 4 && command.getLabel().equalsIgnoreCase("dispenser-fire"))) {
                 com.add(String.format("%2.0f", l.getX()));
                 com.add(String.format("%2.0f %2.0f", l.getX(), l.getY()));
                 com.add(String.format("%2.0f %2.0f %2.0f", l.getX(), l.getY(), l.getZ()));
-            } else if (args.length == 2) {
+            } else if (args.length == 2  || (args.length == 5 && command.getLabel().equalsIgnoreCase("dispenser-fire"))) {
                 com.add(String.format("%2.0f", l.getY()));
                 com.add(String.format("%2.0f %2.0f", l.getY(), l.getZ()));
-            } else if (args.length == 3) {
+            } else if (args.length == 3 || (args.length == 6 && command.getLabel().equalsIgnoreCase("dispenser-fire"))) {
                 com.add(String.format("%2.0f", l.getZ()));
-            } else if (args.length == 4) {
+            } else if ((args.length == 4 && command.getLabel().equalsIgnoreCase("fire")) || args.length == 7) {
                 com.add("5");
-            } else if (args.length == 5) {
+            } else if ((args.length == 5 && command.getLabel().equalsIgnoreCase("fire")) || args.length == 8) {
                 com.add("10");
             }
             return com;
