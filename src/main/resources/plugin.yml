@@ -5,6 +5,8 @@ api-version: 1.13
 authors: [F1remoon]
 description: Burn it down
 website: f1remoon.com
+depend:
+  - LightAPI
 commands:
   fire:
     usage: /<command> <x> <y> <z> [height] [ticks]
@@ -18,4 +20,11 @@ commands:
     usage: /<command> <x1> <y1> <z1> <x2> <y2> <z2> [height] [ticks]
     description: Finds all dispensers with up position and performs fireshow
     permission: fireplugin.create.line.sequence
+  script-execute:
+    usage: /<command> <script.txt>
+    description: Executes script from file
+    permission: fireplugin.script.execute
+  testme:
+    usage: /<command>
+    description: testing command
 
