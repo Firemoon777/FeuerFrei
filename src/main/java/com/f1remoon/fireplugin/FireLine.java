@@ -24,20 +24,31 @@ import java.util.Set;
 public class FireLine implements TabExecutor {
 
     public void createFireLevel(Location l, int duration, boolean simple) {
-        if(simple) {
-            l.getWorld().getBlockAt(l).setType(Material.FIRE);
-        } else {
-            l.getWorld().getBlockAt(l).setType(Material.ACACIA_FENCE);
-            for (int xOffset = -1; xOffset <= 1; xOffset++) {
-                for (int zOffset = -1; zOffset <= 1; zOffset++) {
-                    Location fire = new Location(l.getWorld(), l.getX() + xOffset, l.getY(), l.getZ() + zOffset);
-                    if (xOffset == 0 && zOffset == 0) {
-                        continue;
-                    }
-                    l.getWorld().getBlockAt(fire).setType(Material.FIRE);
+        new BukkitRunnable() {
+            int time = 0;
+            @Override
+            public void run() {
+                if(time >= duration) {
+                    this.cancel();
+                    return;
                 }
+                if(simple) {
+                    l.getWorld().getBlockAt(l).setType(Material.FIRE);
+                } else {
+                    l.getWorld().getBlockAt(l).setType(Material.ACACIA_FENCE);
+                    for (int xOffset = -1; xOffset <= 1; xOffset++) {
+                        for (int zOffset = -1; zOffset <= 1; zOffset++) {
+                            Location fire = new Location(l.getWorld(), l.getX() + xOffset, l.getY(), l.getZ() + zOffset);
+                            if (xOffset == 0 && zOffset == 0) {
+                                continue;
+                            }
+                            l.getWorld().getBlockAt(fire).setType(Material.FIRE);
+                        }
+                    }
+                }
+                time += 2;
             }
-        }
+        }.runTaskTimer(Bukkit.getPluginManager().getPlugin("FirePlugin"), 0, 2);
 
         new BukkitRunnable() {
             @Override

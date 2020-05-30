@@ -28,7 +28,8 @@ public class ScriptExecutor implements TabExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (command.getLabel().equals("testme")) {
+        sender.sendMessage("ok");
+        if (command.getLabel().equals("script-execute")) {
             if(!Tools.checkPermission(sender, "fireplugin.script.execute")) {
                 return false;
             }
@@ -42,14 +43,16 @@ public class ScriptExecutor implements TabExecutor {
                 reader = new BufferedReader(new FileReader(f));
                 String line = reader.readLine();
                 while (line != null) {
-                    String[] data = line.split(":", 2);
-                    int delay = Integer.parseInt(data[0]);
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            Bukkit.getServer().dispatchCommand(sender, data[1].trim());
-                        }
-                    }.runTaskLater(Bukkit.getPluginManager().getPlugin("FirePlugin"), delay);
+                    if(line.startsWith("#") == false && line.length() > 0) {
+                        String[] data = line.split(":", 2);
+                        int delay = Integer.parseInt(data[0]);
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                Bukkit.getServer().dispatchCommand(sender, data[1].trim());
+                            }
+                        }.runTaskLater(Bukkit.getPluginManager().getPlugin("FirePlugin"), delay);
+                    }
                     line = reader.readLine();
                 }
                 reader.close();
