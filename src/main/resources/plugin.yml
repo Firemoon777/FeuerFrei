@@ -24,7 +24,11 @@ commands:
     usage: /<command> <script.txt>
     description: Executes script from file
     permission: fireplugin.script.execute
+  light:
+    usage: /<command> <create|remove> <x> <y> <z> [level]
+    permission: fireplugin.light
+    description: add or remove light
   testme:
     usage: /<command>
-    description: testing command
+    description: test
 

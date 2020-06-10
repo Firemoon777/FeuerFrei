@@ -28,7 +28,6 @@ public class ScriptExecutor implements TabExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        sender.sendMessage("ok");
         if (command.getLabel().equals("script-execute")) {
             if(!Tools.checkPermission(sender, "fireplugin.script.execute")) {
                 return false;

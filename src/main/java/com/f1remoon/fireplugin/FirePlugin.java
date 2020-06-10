@@ -15,6 +15,8 @@ public final class FirePlugin extends JavaPlugin {
         getCommand("dispenser-fire").setExecutor(new FireLine());
         getCommand("explode").setExecutor(new Explosion());
         getCommand("script-execute").setExecutor(new ScriptExecutor());
+        getCommand("light").setExecutor(new Light());
+        getCommand("testme").setExecutor(new Testme());
 
         File f = this.getDataFolder();
         if(!f.exists()) {
