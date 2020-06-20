@@ -1,6 +1,5 @@
-package com.f1remoon.fireplugin;
+package com.f1remoon.fireplugin.tools;
 
-import com.google.common.collect.ImmutableList;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.BlockCommandSender;

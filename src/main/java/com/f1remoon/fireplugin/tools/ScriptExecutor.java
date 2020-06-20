@@ -1,20 +1,10 @@
-package com.f1remoon.fireplugin;
+package com.f1remoon.fireplugin.tools;
 
-import com.google.common.collect.ImmutableList;
-import net.minecraft.server.v1_15_R1.EntityLightning;
-import net.minecraft.server.v1_15_R1.PacketPlayOutWorldParticles;
 import org.bukkit.*;
-import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LightningStrike;
-import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import ru.beykerykt.lightapi.LightAPI;
-import ru.beykerykt.lightapi.LightType;
-import ru.beykerykt.lightapi.chunks.ChunkInfo;
 
 
 import java.io.BufferedReader;

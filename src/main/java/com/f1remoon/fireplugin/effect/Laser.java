@@ -1,4 +1,4 @@
-package com.f1remoon.fireplugin;
+package com.f1remoon.fireplugin.effect;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;

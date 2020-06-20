@@ -1,5 +1,9 @@
 package com.f1remoon.fireplugin;
 
+import com.f1remoon.fireplugin.effect.Explosion;
+import com.f1remoon.fireplugin.effect.FireLine;
+import com.f1remoon.fireplugin.effect.Light;
+import com.f1remoon.fireplugin.tools.ScriptExecutor;
 import org.bukkit.*;
 import org.bukkit.plugin.java.JavaPlugin;
 
