@@ -4,16 +4,22 @@ import com.f1remoon.fireplugin.npc.NPC;
 import com.f1remoon.fireplugin.npc.NPCManager;
 import com.f1remoon.fireplugin.tools.Tools;
 import com.google.common.collect.ImmutableList;
-import net.minecraft.server.v1_15_R1.Vec3D;
+import net.minecraft.server.v1_15_R1.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_15_R1.util.CraftMagicNumbers;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.meta.CrossbowMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Testme implements TabExecutor {
@@ -30,21 +36,14 @@ public class Testme implements TabExecutor {
                 till.spawn();
                 p.sendMessage("NPC Created v8");
 
-                till.move(1.0, 0.0, 0.0);
+                org.bukkit.inventory.ItemStack crossbow = new org.bukkit.inventory.ItemStack(Material.CROSSBOW);
+                CrossbowMeta meta = ((CrossbowMeta)crossbow.getItemMeta());
+                meta.addChargedProjectile(new org.bukkit.inventory.ItemStack(Material.ARROW, 1));
+                crossbow.setItemMeta(meta);
+                ItemStack stack = CraftItemStack.asNMSCopy(crossbow);
+                till.setEquipment(EnumItemSlot.MAINHAND, stack);
 
-                new BukkitRunnable() {
-                    int i = 15;
-                    @Override
-                    public void run() {
-                        if(i < 0) {
-                            this.cancel();
-                        }
-                        i--;
-
-                        till.setAction(NPC.Pose.CROUCHING);
-                        till.setAnimation(NPC.NPCAnimation.SWING_MAIN_HAND);
-                    }
-                }.runTaskTimer(Bukkit.getPluginManager().getPlugin("FirePlugin"), 40, 10);
+                till.look(0,-90, 3);
 
                 new BukkitRunnable() {
                     @Override

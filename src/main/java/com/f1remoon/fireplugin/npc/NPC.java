@@ -13,6 +13,7 @@ import org.bukkit.craftbukkit.v1_15_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -37,6 +38,7 @@ public class NPC {
 
         GameProfile gameProfile = new GameProfile(UUID.randomUUID(), name);
         this.npc = new EntityPlayer(server, world, gameProfile, new PlayerInteractManager(world));
+        this.npc.setNoGravity(false);
 
         this.npc.setLocation(
                 l.getX(),
@@ -65,8 +67,107 @@ public class NPC {
         this.sendPacket(packet);
     }
 
-    public void move(double x, double y, double z) {
-        this.npc.move(EnumMoveType.SELF, new Vec3D(x, y, z));
+    BukkitRunnable movement = null;
+    public void move(final float x, final float y, final float z, final float speed) {
+        movement = new BukkitRunnable() {
+            final private float e = 0.001f;
+
+            private float estimate_x = x;
+            private float estimate_y = y;
+            private float estimate_z = z;
+            final private float velocity = speed;
+
+            private float sign(float a) {
+                if(a < 0) {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            }
+
+            @Override
+            public void run() {
+                float x_offset = sign(estimate_x) * Math.min(velocity, Math.abs(estimate_x));
+                float y_offset = sign(estimate_y) * Math.min(velocity, Math.abs(estimate_y));
+                float z_offset = sign(estimate_z) * Math.min(velocity, Math.abs(estimate_z));
+
+                PacketPlayOutEntity.PacketPlayOutRelEntityMove packet = new PacketPlayOutEntity.PacketPlayOutRelEntityMove(
+                        npc.getId(),
+                        (short)Math.floor(x_offset*32*128),
+                        (short)Math.floor(y_offset*32*128),
+                        (short)Math.floor(z_offset*32*128),
+                        true
+                );
+                sendPacket(packet);
+
+                estimate_x += -1 * x_offset;
+                estimate_y += -1 * y_offset;
+                estimate_z += -1 * z_offset;
+                if (Math.abs(estimate_x) < e && Math.abs(estimate_y) < e && Math.abs(estimate_z) < e) {
+                    this.cancel();
+                }
+            }
+        };
+        movement.runTaskTimer(Bukkit.getPluginManager().getPlugin("FirePlugin"), 0, 1);
+
+    }
+
+    public void cancelMove() {
+        if(this.movement == null || this.movement.isCancelled()) {
+            return;
+        }
+        this.movement.cancel();
+    }
+
+    BukkitRunnable lookMovement = null;
+    public void look(final float yaw, final float pitch, final float speed) {
+        lookMovement = new BukkitRunnable() {
+            final float e = 0.1f;
+
+            float current_yaw = npc.yaw;
+            float current_pitch = npc.pitch;
+
+            private float sign(float a) {
+                if(a < 0) {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            }
+
+            @Override
+            public void run() {
+                float pitch_degrees = npc.pitch * 360 / 256.f;
+
+                float yaw_offset = sign(yaw - current_yaw) * speed;
+                current_yaw += yaw_offset;
+
+                float pitch_offset = sign(pitch - current_pitch) * speed;
+                current_pitch += pitch_offset;
+
+                Bukkit.getLogger().info(String.format("yaw = %.2f ( %.2f )", npc.yaw, yaw_offset));
+                Bukkit.getLogger().info(String.format("pitch = %.2f ( %.2f )", npc.pitch, pitch_offset));
+                PacketPlayOutEntity.PacketPlayOutEntityLook packet = new PacketPlayOutEntity.PacketPlayOutEntityLook(
+                        npc.getId(),
+                        (byte)(current_yaw * 256.f / 360),
+                        (byte)(current_pitch * 256.f / 360),
+                        true
+                );
+                sendPacket(packet);
+
+                if(Math.abs(current_pitch - pitch) < e && Math.abs(current_yaw - yaw) < e) {
+                    this.cancel();
+                }
+            }
+        };
+        lookMovement.runTaskTimer(Bukkit.getPluginManager().getPlugin("FirePlugin"), 0, 1);
+    }
+
+    public void cancelLook() {
+        if(this.lookMovement == null || this.lookMovement.isCancelled()) {
+            return;
+        }
+        this.lookMovement.cancel();
     }
 
     public void despawn() {
