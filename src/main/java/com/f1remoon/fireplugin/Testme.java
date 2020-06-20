@@ -4,6 +4,7 @@ import com.f1remoon.fireplugin.npc.NPC;
 import com.f1remoon.fireplugin.npc.NPCManager;
 import com.f1remoon.fireplugin.tools.Tools;
 import com.google.common.collect.ImmutableList;
+import net.minecraft.server.v1_15_R1.Vec3D;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -29,7 +30,7 @@ public class Testme implements TabExecutor {
                 till.spawn();
                 p.sendMessage("NPC Created v8");
 
-                till.setAction(NPC.Action.START_SNEAKING);
+                till.move(1.0, 0.0, 0.0);
 
                 new BukkitRunnable() {
                     int i = 15;
@@ -40,9 +41,10 @@ public class Testme implements TabExecutor {
                         }
                         i--;
 
+                        till.setAction(NPC.Pose.CROUCHING);
                         till.setAnimation(NPC.NPCAnimation.SWING_MAIN_HAND);
                     }
-                }.runTaskTimer(Bukkit.getPluginManager().getPlugin("FirePlugin"), 40, 5);
+                }.runTaskTimer(Bukkit.getPluginManager().getPlugin("FirePlugin"), 40, 10);
 
                 new BukkitRunnable() {
                     @Override

@@ -49,6 +49,7 @@ public class NPC {
         if(texture != null && signature != null) {
             this.npc.getProfile().getProperties().put("textures", new Property("textures", texture, signature));
         }
+
     }
 
     public void spawn() {
@@ -62,6 +63,10 @@ public class NPC {
         this.setField(packet, "f", (byte) ((int) location.getYaw() * 256.0F / 360.0F));
         this.setField(packet, "g", (byte) ((int) location.getPitch() * 256.0F / 360.0F));
         this.sendPacket(packet);
+    }
+
+    public void move(double x, double y, double z) {
+        this.npc.move(EnumMoveType.SELF, new Vec3D(x, y, z));
     }
 
     public void despawn() {
@@ -117,34 +122,22 @@ public class NPC {
         this.setAnimation((byte) animation.getId());
     }
 
-    public enum Action {
-        START_SNEAKING(0),
-        STOP_SNEAKING(1),
-        LEAVE_BED(2),
-        START_SPRINT(3),
-        STOP_SPRINT(4),
-        START_HORSE_JUMP(5),
-        STOP_HORSE_JUMP(6),
-        OPEN_HORSE_INVENTORY(7),
-        START_FLYING_WITH_ELYTRA(8);
-
-        private int id;
-
-        private Action(int id) {
-            this.id = id;
-        }
-
-        public int getId() {
-            return id;
-        }
+    public enum Pose {
+        STANDING,
+        FALL_FLYING,
+        SLEEPING,
+        SWIMMING,
+        SPIN_ATTACK,
+        CROUCHING,
+        DYING;
     }
 
-    public void setAction(Action action) {
+    public void setAction(Pose pose) {
         DataWatcherObject obj = new DataWatcherObject<>(6, DataWatcherRegistry.s);
 
         DataWatcher dw = this.npc.getDataWatcher();
         EntityPose a = (EntityPose)dw.get(obj);
-        dw.set(obj, EntityPose.CROUCHING);
+        dw.set(obj, EntityPose.valueOf(pose.name()));
         PacketPlayOutEntityMetadata packet = new PacketPlayOutEntityMetadata(this.npc.getId(), dw, false);
         this.sendPacket(packet);
     }
