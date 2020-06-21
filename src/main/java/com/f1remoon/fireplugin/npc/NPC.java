@@ -9,9 +9,11 @@ import com.mojang.authlib.properties.Property;
 import net.minecraft.server.v1_15_R1.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_15_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -132,10 +134,10 @@ public class NPC {
             public void run() {
                 float pitch_degrees = npc.pitch * 360 / 256.f;
 
-                float yaw_offset = sign(yaw - current_yaw) * speed;
+                float yaw_offset = sign(yaw - current_yaw) * Math.min(speed, Math.abs(yaw - current_yaw));
                 current_yaw += yaw_offset;
 
-                float pitch_offset = sign(pitch - current_pitch) * speed;
+                float pitch_offset = sign(pitch - current_pitch) * Math.min(speed, Math.abs(pitch - current_pitch));
                 current_pitch += pitch_offset;
 
                 Bukkit.getLogger().info(String.format("yaw = %.2f ( %.2f )", npc.yaw, yaw_offset));
@@ -166,6 +168,9 @@ public class NPC {
     public void despawn() {
         this.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, this.npc));
         this.sendPacket(new PacketPlayOutEntityDestroy(new int[] { this.npc.getId() }));
+
+        this.cancelLook();
+        this.cancelMove();
     }
 
     private void setField(Object obj, String field_name, Object value) {
@@ -257,5 +262,27 @@ public class NPC {
 
     public String getName() {
         return this.name;
+    }
+
+    public EntityPlayer getNpc() {
+        return npc;
+    }
+
+    public void setMainHand(org.bukkit.inventory.ItemStack material) {
+        ItemStack stack = CraftItemStack.asNMSCopy(material);
+        //this.reload();
+        npc.setEquipment(EnumItemSlot.MAINHAND, stack);
+    }
+
+    public void setOffHand(org.bukkit.inventory.ItemStack material) {
+        ItemStack stack = CraftItemStack.asNMSCopy(material);
+        npc.setEquipment(EnumItemSlot.OFFHAND, stack);
+        this.reload();
+    }
+
+    public void reload() {
+        this.sendPacket(new PacketPlayOutEntityDestroy(new int[] { this.npc.getId() }));
+        this.sendPacket(new PacketPlayOutNamedEntitySpawn(npc));
+        this.sendPacket(new PacketPlayOutEntityHeadRotation(this.npc, (byte)(this.npc.yaw * 256 / 360)));
     }
 }
