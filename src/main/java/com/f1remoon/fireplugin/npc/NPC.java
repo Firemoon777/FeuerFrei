@@ -56,15 +56,8 @@ public class NPC {
 
     public void spawn() {
         this.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, this.npc));
-        PacketPlayOutNamedEntitySpawn packet = new PacketPlayOutNamedEntitySpawn();
-        this.setField(packet, "a", this.npc.getId());
-        this.setField(packet, "b", this.npc.getProfile().getId());
-        this.setField(packet, "c", location.getX());
-        this.setField(packet, "d", location.getY());
-        this.setField(packet, "e", location.getZ());
-        this.setField(packet, "f", (byte) ((int) location.getYaw() * 256.0F / 360.0F));
-        this.setField(packet, "g", (byte) ((int) location.getPitch() * 256.0F / 360.0F));
-        this.sendPacket(packet);
+        this.sendPacket(new PacketPlayOutNamedEntitySpawn(npc));
+        this.sendPacket(new PacketPlayOutEntityHeadRotation(this.npc, (byte)(this.npc.yaw * 256 / 360)));
     }
 
     BukkitRunnable movement = null;
@@ -262,4 +255,7 @@ public class NPC {
         }
     }
 
+    public String getName() {
+        return this.name;
+    }
 }

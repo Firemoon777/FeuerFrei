@@ -3,6 +3,7 @@ package com.f1remoon.fireplugin;
 import com.f1remoon.fireplugin.effect.Explosion;
 import com.f1remoon.fireplugin.effect.FireLine;
 import com.f1remoon.fireplugin.effect.Light;
+import com.f1remoon.fireplugin.npc.NPCCommand;
 import com.f1remoon.fireplugin.tools.ScriptExecutor;
 import org.bukkit.*;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -21,6 +22,7 @@ public final class FirePlugin extends JavaPlugin {
         getCommand("script-execute").setExecutor(new ScriptExecutor());
         getCommand("light").setExecutor(new Light());
         getCommand("testme").setExecutor(new Testme());
+        getCommand("npc").setExecutor(new NPCCommand());
 
         File f = this.getDataFolder();
         if(!f.exists()) {

@@ -28,6 +28,10 @@ commands:
     usage: /<command> <create|remove> <x> <y> <z> [level]
     permission: fireplugin.light
     description: add or remove light
+  npc:
+    usage: /<command>
+    permission: fireplugin.npc
+    description: manages npc
   testme:
     usage: /<command>
     description: test

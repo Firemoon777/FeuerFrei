@@ -39,8 +39,18 @@ public class Tools {
         Double x = Double.parseDouble(xArg);
         Double y = Double.parseDouble(yArg);
         Double z = Double.parseDouble(zArg);
+        return new Location(w, x, y, z);
+    }
 
-        return new Location(w, x, y ,z);
+
+    public static Location parseLocationArgs(CommandSender sender, String xArg, String yArg, String zArg, String yawArg, String pitchArg) {
+        World w = Tools.extractWorld(sender);
+        Double x = Double.parseDouble(xArg);
+        Double y = Double.parseDouble(yArg);
+        Double z = Double.parseDouble(zArg);
+        Float yaw = Float.parseFloat(yawArg);
+        Float pitch = Float.parseFloat(pitchArg);
+        return new Location(w, x, y, z, yaw, pitch);
     }
 
     public static Location parseLocationArgs(CommandSender sender, String[] args) {

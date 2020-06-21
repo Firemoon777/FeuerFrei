@@ -17,6 +17,9 @@ public class Explosion implements TabExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (command.getLabel().equals("explode")) {
+            if(!Tools.checkPermission(sender, "fireplugin.create.explosion")) {
+                return false;
+            }
             if(args.length < 3) {
                 sender.sendMessage("Incorrect location");
                 return true;
